@@ -1,0 +1,6 @@
+{
+    "python.defaultInterpreterPath": "/Users/madaocesar/Documents/stuff/Booking-App/booking_api/venv/bin/python",
+    "python.analysis.extraPaths": [
+        "/Users/madaocesar/Documents/stuff/Booking-App/booking_api"
+    ]
+} 

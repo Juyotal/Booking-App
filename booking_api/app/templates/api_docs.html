@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcube Room Booking API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+        }
+        h1 {
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+        h2 {
+            margin-top: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        code {
+            background-color: #f8f8f8;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            padding: 2px 4px;
+            display: block;
+            padding: 10px;
+            overflow: auto;
+            white-space: pre;
+            margin: 10px 0;
+        }
+        .endpoint {
+            background-color: #f9f9f9;
+            border-left: 4px solid #2980b9;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 3px;
+        }
+        .method {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .url {
+            font-family: Consolas, Monaco, 'Andale Mono', monospace;
+            color: #16a085;
+        }
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+        }
+        th, td {
+            text-align: left;
+            padding: 8px;
+            border: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .response {
+            background-color: #f0f7fb;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bitcube Room Booking API Documentation</h1>
+    
+    <p>This API allows you to manage conference room bookings at Bitcube.</p>
+    
+    <h2>Base URL</h2>
+    <p>All endpoints are relative to: <code>http://localhost:5000</code></p>
+    
+    <h2>Authentication</h2>
+    <p>Currently, this API does not require authentication.</p>
+    
+    <h2>Endpoints</h2>
+    
+    <div class="endpoint">
+        <h3><span class="method">POST</span> <span class="url">/api/bookings</span></h3>
+        <p>Create a new room booking.</p>
+        
+        <h4>Request Body</h4>
+        <code>
+{
+  "room_id": "550e8400-e29b-41d4-a716-446655440000",
+  "booked_by": "John Doe",
+  "booking_start": "September 14 2025 14:00",
+  "duration_minutes": 60
+}
+        </code>
+        
+        <h4>Parameters</h4>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Required</th>
+            </tr>
+            <tr>
+                <td>room_id</td>
+                <td>string (UUID)</td>
+                <td>Unique identifier for the room</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>booked_by</td>
+                <td>string</td>
+                <td>Name of the person making the booking</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>booking_start</td>
+                <td>string (ISO 8601 datetime or "%B %d %Y %H:%M")</td>
+                <td>Start time of the booking</td>
+                <td>Yes</td>
+            </tr>
+            <tr>
+                <td>duration_minutes</td>
+                <td>integer</td>
+                <td>Duration of the booking in minutes</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+        
+        <h4>Response (201 Created)</h4>
+        <div class="response">
+            <code>
+{
+  "id": 1,
+  "room_id": "550e8400-e29b-41d4-a716-446655440000",
+  "booked_by": "John Doe",
+  "booking_start": "September 14 2025 14:00",
+  "duration_minutes": 60,
+  "booking_end": "September 14 2025 15:00"
+}
+            </code>
+        </div>
+        
+        <h4>Error Responses</h4>
+        <p><strong>400 Bad Request</strong> - If the request data is invalid</p>
+        <div class="response">
+            <code>
+{
+  "errors": {
+    "room_id": ["Invalid UUID format for room_id"],
+    "duration_minutes": ["Duration must be positive"]
+  }
+}
+            </code>
+        </div>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">GET</span> <span class="url">/api/bookings</span></h3>
+        <p>Get all room bookings.</p>
+        
+        <h4>Response (200 OK)</h4>
+        <div class="response">
+            <code>
+[
+  {
+    "id": 1,
+    "room_id": "550e8400-e29b-41d4-a716-446655440000",
+    "booked_by": "John Doe",
+    "booking_start": "September 14 2025 14:00",
+    "duration_minutes": 60,
+    "booking_end": "September 14 2025 15:00"
+  },
+  {
+    "id": 2,
+    "room_id": "550e8400-e29b-41d4-a716-446655440000",
+    "booked_by": "Jane Smith",
+    "booking_start": "September 14 2025 16:00",
+    "duration_minutes": 90,
+    "booking_end": "September 14 2025 17:30"
+  }
+]
+            </code>
+        </div>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">GET</span> <span class="url">/api/bookings/{id}</span></h3>
+        <p>Get a specific room booking by ID.</p>
+        
+        <h4>Path Parameters</h4>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Required</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>integer</td>
+                <td>ID of the booking to retrieve</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+        
+        <h4>Response (200 OK)</h4>
+        <div class="response">
+            <code>
+{
+  "id": 1,
+  "room_id": "550e8400-e29b-41d4-a716-446655440000",
+  "booked_by": "John Doe",
+  "booking_start": "September 14 2025 14:00",
+  "duration_minutes": 60,
+  "booking_end": "September 14 2025 15:00"
+}
+            </code>
+        </div>
+        
+        <h4>Error Responses</h4>
+        <p><strong>404 Not Found</strong> - If the booking with the specified ID does not exist</p>
+        <div class="response">
+            <code>
+{
+  "message": "Booking not found"
+}
+            </code>
+        </div>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">PUT</span> <span class="url">/api/bookings/{id}</span></h3>
+        <p>Update an existing room booking.</p>
+        
+        <h4>Path Parameters</h4>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Required</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>integer</td>
+                <td>ID of the booking to update</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+        
+        <h4>Request Body</h4>
+        <code>
+{
+  "room_id": "550e8400-e29b-41d4-a716-446655440000",
+  "booked_by": "Jane Smith",
+  "booking_start": "September 14 2025 16:00",
+  "duration_minutes": 90
+}
+        </code>
+        
+        <h4>Response (200 OK)</h4>
+        <div class="response">
+            <code>
+{
+  "id": 1,
+  "room_id": "550e8400-e29b-41d4-a716-446655440000",
+  "booked_by": "Jane Smith",
+  "booking_start": "September 14 2025 16:00",
+  "duration_minutes": 90,
+  "booking_end": "September 14 2025 17:30"
+}
+            </code>
+        </div>
+        
+        <h4>Error Responses</h4>
+        <p><strong>400 Bad Request</strong> - If the request data is invalid</p>
+        <p><strong>404 Not Found</strong> - If the booking with the specified ID does not exist</p>
+    </div>
+    
+    <div class="endpoint">
+        <h3><span class="method">DELETE</span> <span class="url">/api/bookings/{id}</span></h3>
+        <p>Delete a room booking.</p>
+        
+        <h4>Path Parameters</h4>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Description</th>
+                <th>Required</th>
+            </tr>
+            <tr>
+                <td>id</td>
+                <td>integer</td>
+                <td>ID of the booking to delete</td>
+                <td>Yes</td>
+            </tr>
+        </table>
+        
+        <h4>Response (204 No Content)</h4>
+        <p>No response body is returned for successful deletion.</p>
+        
+        <h4>Error Responses</h4>
+        <p><strong>404 Not Found</strong> - If the booking with the specified ID does not exist</p>
+    </div>
+    
+    <h2>Data Models</h2>
+    
+    <h3>Room Booking</h3>
+    <table>
+        <tr>
+            <th>Field</th>
+            <th>Type</th>
+            <th>Description</th>
+        </tr>
+        <tr>
+            <td>id</td>
+            <td>integer</td>
+            <td>Unique identifier for the booking (auto-generated)</td>
+        </tr>
+        <tr>
+            <td>room_id</td>
+            <td>string (UUID)</td>
+            <td>Unique identifier for the room</td>
+        </tr>
+        <tr>
+            <td>booked_by</td>
+            <td>string</td>
+            <td>Name of the person making the booking</td>
+        </tr>
+        <tr>
+            <td>booking_start</td>
+            <td>string (ISO 8601 datetime or "%B %d %Y %H:%M")</td>
+            <td>Start time of the booking</td>
+        </tr>
+        <tr>
+            <td>duration_minutes</td>
+            <td>integer</td>
+            <td>Duration of the booking in minutes</td>
+        </tr>
+        <tr>
+            <td>booking_end</td>
+            <td>string (ISO 8601 datetime or "%B %d %Y %H:%M")</td>
+            <td>End time of the booking (calculated from start time and duration)</td>
+        </tr>
+    </table>
+    
+    <h2>Error Handling</h2>
+    <p>The API uses standard HTTP status codes to indicate the success or failure of a request:</p>
+    <ul>
+        <li><strong>200 OK</strong> - The request was successful</li>
+        <li><strong>201 Created</strong> - A new resource was successfully created</li>
+        <li><strong>204 No Content</strong> - The request was successful but no content is returned</li>
+        <li><strong>400 Bad Request</strong> - The request was invalid or cannot be served</li>
+        <li><strong>404 Not Found</strong> - The requested resource does not exist</li>
+        <li><strong>500 Internal Server Error</strong> - An error occurred on the server</li>
+    </ul>
+    
+    <footer>    
+        <p>&copy; 2025 Cesar. All rights reserved.</p>
+    </footer>
+</body>
+</html> 
